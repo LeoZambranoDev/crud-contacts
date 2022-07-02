@@ -1,6 +1,7 @@
 
 
 const db = require('../data/models');
+const jwt =require('jsonwebtoken');
 
 module.exports={
     index: (req,res)=>{
@@ -16,7 +17,18 @@ module.exports={
         .then(user=>{
             if(user){
                 if(user.password === req.body.password){
-                    res.json(user);
+                    const token = jwt.sign({email:req.body.email},'secret',{expiresIn:'1h'});
+                    res.status(200).json({
+                        meta:{
+                            status:200,
+                            message:'login successful'
+                        },
+                        data:{
+                            token,
+                            expireIn:'1h',
+                            user
+                        }
+                    });
                 }else{
                     res.json("incorrect password");
                 }

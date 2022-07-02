@@ -3,12 +3,14 @@ var router = express.Router();
 
 const UserController= require('../controllers/user.js');
 
+const verifyToken = require('../middleware/verifyToken');
+
 /* GET home page. */
-router.get('/', UserController.index);
+router.get('/', verifyToken , UserController.index);
 router.post('/create', UserController.create);
 router.post('/login', UserController.login);
-router.get('/getContacts', UserController.getContacts);
-router.post('/delete', UserController.delete);
-router.post('/update', UserController.update);
+router.get('/getContacts', verifyToken, UserController.getContacts);
+router.post('/delete',verifyToken, UserController.delete);
+router.post('/update',verifyToken, UserController.update);
 
 module.exports = router;
